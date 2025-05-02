@@ -1,0 +1,182 @@
+Here is the complete code for your app to run, including the functionalities to show a dialog, save data to `SharedPreferences`, send an SMS, open a webpage, and play an audio file.
+
+### 1. **`activity_main.xml` (Layout File)**
+
+This is the layout file with the buttons for the different actions.
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- EditText for entering name -->
+    <EditText
+        android:id="@+id/etName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Name"/>
+
+    <!-- Button to show dialog -->
+    <Button
+        android:id="@+id/btnDialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Show Dialog"/>
+
+    <!-- Button to save name in SharedPreferences -->
+    <Button
+        android:id="@+id/btnSavePref"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Save to SharedPreferences"/>
+
+    <!-- Button to send SMS -->
+    <Button
+        android:id="@+id/sms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Send SMS"/>
+
+    <!-- Button to open web page -->
+    <Button
+        android:id="@+id/web"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Open Website"/>
+
+    <!-- Button to play audio -->
+    <Button
+        android:id="@+id/audio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Play Audio"/>
+    
+</LinearLayout>
+```
+
+### 2. **`MainActivity.kt` (Main Activity File)**
+
+This is the Kotlin code for the MainActivity that implements the button functionalities.
+
+```kotlin
+package com.example.mypreferenceapp
+
+import android.content.Intent
+import android.media.MediaPlayer
+import android.net.Uri
+import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        // Show dialog on button click
+        findViewById<Button>(R.id.btnDialog).setOnClickListener {
+            AlertDialog.Builder(this)
+                .setTitle("Info")
+                .setMessage("This is a dialog box.")
+                .setPositiveButton("OK", null)
+                .show()
+        }
+
+        // SharedPreferences
+        val prefs = getSharedPreferences("mypref", MODE_PRIVATE)
+
+        // Save to SharedPreferences on button click
+        findViewById<Button>(R.id.btnSavePref).setOnClickListener {
+            val name = findViewById<EditText>(R.id.etName).text.toString()
+            prefs.edit().putString("userName", name).apply()
+            Toast.makeText(this, "Saved in SharedPreferences", Toast.LENGTH_SHORT).show()
+        }
+
+        // Send SMS
+        findViewById<Button>(R.id.sms).setOnClickListener {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("smsto:12345")).putExtra("sms_body", "Hello"))
+        }
+
+        // Open Website
+        findViewById<Button>(R.id.web).setOnClickListener {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://google.com")))
+        }
+
+        // Play Audio
+        findViewById<Button>(R.id.audio).setOnClickListener {
+            MediaPlayer.create(this, R.raw.sample_audio).start()
+        }
+    }
+}
+```
+
+### 3. **`AndroidManifest.xml` (Manifest File)**
+
+This is the manifest file that defines the app and its permissions.
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.mypreferenceapp">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/Theme.MyPreferenceApp">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
+```
+
+### 4. **Adding an Audio File**
+
+Make sure to add an audio file (`sample_audio.mp3`) to the `res/raw` folder. If the `raw` folder doesn't exist, create it under `res/`:
+
+```
+res/
+   raw/
+       sample_audio.mp3
+```
+
+If you don't have an audio file, you can download any `.mp3` file and rename it to `sample_audio.mp3` or use any file you prefer.
+
+### Running the Application:
+
+1. **Ensure that your Android device or emulator is connected**.
+2. **Open the project in Android Studio**.
+3. **Build and run** the project on your emulator/device.
+4. **Test the functionality**:
+
+   * **Show Dialog**: Click the "Show Dialog" button to see the dialog box.
+   * **Save to SharedPreferences**: Enter a name in the `EditText` and click the "Save to SharedPreferences" button to save the name.
+   * **Send SMS**: Click the "Send SMS" button to open the SMS app with a pre-filled message.
+   * **Open Website**: Click the "Open Website" button to open a webpage (Google).
+   * **Play Audio**: Click the "Play Audio" button to play the audio file (`sample_audio.mp3`).
+
+### Permissions:
+
+For sending SMS or accessing certain features, make sure the relevant permissions are added to the `AndroidManifest.xml`. If you intend to send SMS or use other sensitive features, you might need to request permissions.
+
+For SMS, add this in the `AndroidManifest.xml`:
+
+```xml
+<uses-permission android:name="android.permission.SEND_SMS"/>
+```
+
+If you're targeting **Android 6.0 (API level 23)** or higher, you may also need to request permissions at runtime for SMS and other sensitive operations.
+
+Let me know if you need further assistance!
