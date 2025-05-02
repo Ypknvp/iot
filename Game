@@ -1,0 +1,98 @@
+Here’s a simple Android game using **Kotlin** and **XML** — a **"Click Counter" Game**, where the user gains a point every time they tap a button.
+
+---
+
+### **1. MainActivity.kt**
+
+```kotlin
+package com.example.simplegame
+
+import android.os.Bundle
+import android.widget.Button
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+
+class MainActivity : AppCompatActivity() {
+    private var score = 0
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val scoreText: TextView = findViewById(R.id.scoreText)
+        val clickButton: Button = findViewById(R.id.clickButton)
+
+        clickButton.setOnClickListener {
+            score++
+            scoreText.text = "Score: $score"
+        }
+    }
+}
+```
+
+---
+
+### **2. activity\_main.xml**
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:padding="20dp"
+    android:background="#FFEB3B">
+
+    <TextView
+        android:id="@+id/scoreText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Score: 0"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp" />
+
+    <Button
+        android:id="@+id/clickButton"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="Click Me!"
+        android:textSize="20sp"
+        android:layout_below="@id/scoreText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:background="#2196F3"
+        android:textColor="#FFFFFF" />
+</RelativeLayout>
+```
+
+---
+
+### **3. AndroidManifest.xml**
+
+Make sure this is present:
+
+```xml
+<application
+    android:allowBackup="true"
+    android:icon="@mipmap/ic_launcher"
+    android:label="SimpleGame"
+    android:roundIcon="@mipmap/ic_launcher_round"
+    android:supportsRtl="true"
+    android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
+    
+    <activity android:name=".MainActivity">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN"/>
+            <category android:name="android.intent.category.LAUNCHER"/>
+        </intent-filter>
+    </activity>
+</application>
+```
+
+---
+
+Would you like to extend this into a timer-based game or high score tracker?
