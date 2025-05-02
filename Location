@@ -1,0 +1,86 @@
+To get a **location address from latitude and longitude** in Android using Kotlin, you can use the **Geocoder API**. Here's a complete example:
+
+---
+
+### **1. Add Permission (AndroidManifest.xml)**
+
+```xml
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+```
+
+---
+
+### **2. Kotlin Code to Get Address from Latitude & Longitude**
+
+```kotlin
+import android.location.Geocoder
+import android.os.Bundle
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import java.util.*
+
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val textView = findViewById<TextView>(R.id.textView)
+
+        // Sample coordinates
+        val latitude = 37.4219983
+        val longitude = -122.084
+
+        val address = getAddressFromLatLng(latitude, longitude)
+        textView.text = address ?: "Address not found"
+    }
+
+    private fun getAddressFromLatLng(lat: Double, lng: Double): String? {
+        return try {
+            val geocoder = Geocoder(this, Locale.getDefault())
+            val addresses = geocoder.getFromLocation(lat, lng, 1)
+            if (addresses != null && addresses.isNotEmpty()) {
+                val address = addresses[0]
+                address.getAddressLine(0)  // Full address
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+}
+```
+
+---
+
+### **3. Main Layout (res/layout/activity\_main.xml)**
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Address will appear here"
+        android:textSize="18sp" />
+</LinearLayout>
+```
+
+---
+
+### Notes:
+
+* Make sure you test on a real device, not the emulator.
+* Geocoder may not work properly without network access or if Google Play Services isn't available.
+
+Would you like a version that uses the **Google Maps API** instead for more accurate or detailed addresses?
